@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "713070198848",
+    "project_id": "mitramanas-ba305",
+    "storage_bucket": "mitramanas-ba305.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:713070198848:android:d9fe235e20237c680a5fa5",
+        "android_client_info": {
+          "package_name": "com.harsh.mitramanas"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmGofeWqLeshmb69XiqaCDLonYhBXjqW4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

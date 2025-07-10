@@ -1,6 +1,6 @@
-import 'package:mitramanas/features.meditation/domain/repositories/meditation_repository.dart';
 
 import '../entities/daily_quote.dart';
+import '../repositories/meditation_repository.dart';
 
 class GetDailyQuote{
   final MeditationRepository repository;

@@ -1,4 +1,4 @@
-import 'package:mental_health/features/meditation/domain/entities/daily_quote.dart';
+import '../../../domain/entities/daily_quote.dart';
 
 abstract class DailyQuoteState {}
 

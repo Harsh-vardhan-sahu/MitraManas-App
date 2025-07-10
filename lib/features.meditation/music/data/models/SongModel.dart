@@ -6,7 +6,8 @@ class SongModel extends Song {
     required String title,
     required String artist,
     required String link,
-  }) : super(id: id, title: title, artist: artist, link: link);
+    String? image, // 👈 allow null
+  }) : super(id: id, title: title, artist: artist, link: link, image: image);
 
   factory SongModel.fromJson(Map<String, dynamic> json) {
     return SongModel(
@@ -14,6 +15,7 @@ class SongModel extends Song {
       title: json['title'],
       artist: json['artist'],
       link: json['link'],
+      image: json['image'], // null-safe
     );
   }
 }

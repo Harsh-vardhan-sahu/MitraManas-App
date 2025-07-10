@@ -39,10 +39,20 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                 itemBuilder: (context, index) {
                   final song = state.songs[index];
                   return ListTile(
-                    leading: CircleAvatar(
-                      backgroundImage: AssetImage('assets/child_with_dog.png'), // or any default// Make sure `thumbnail` exists in model
+                     leading: CircleAvatar(
+                    radius: 25, // adjust size as needed
+                    backgroundColor: Colors.grey[200],
+                    backgroundImage: NetworkImage(
+                      (song.image?.isNotEmpty ?? false)
+                          ? song.image!
+                          : 'https://picsum.photos/200',
                     ),
-                    trailing: const Icon(Icons.arrow_forward_ios, size: 15),
+                    onBackgroundImageError: (_, __) {
+                      print("Image load failed for: ${song.image}");
+                    },
+                  ),
+
+                  trailing: const Icon(Icons.arrow_forward_ios, size: 15),
                     title: Text(
                       song.title,
                       style: Theme.of(context).textTheme.labelMedium,

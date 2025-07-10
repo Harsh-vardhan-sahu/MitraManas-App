@@ -80,11 +80,33 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: Image.asset(
-                'assets/child_with_dog.png',
+              child: Image.network(
+                (widget.song.image?.isNotEmpty ?? false)
+                    ? widget.song.image!
+                    : 'https://picsum.photos/400',
                 height: 300,
                 width: double.infinity,
                 fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  print("Failed to load song image: ${widget.song.image}");
+                  return Image.asset(
+                    'assets/child_with_dog.png', // fallback local image
+                    height: 300,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  );
+                },
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Container(
+                    height: 300,
+                    width: double.infinity,
+                    color: Colors.grey[200],
+                    child: const Center(
+                      child: CircularProgressIndicator(color: DefaultColors.pink),
+                    ),
+                  );
+                },
               ),
             ),
             const SizedBox(height: 16),

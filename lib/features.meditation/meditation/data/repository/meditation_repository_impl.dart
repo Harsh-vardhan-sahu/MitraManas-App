@@ -1,12 +1,9 @@
 
 
-
-import 'package:mitramanas/features.meditation/domain/entities/daily_quote.dart';
-
-import 'package:mitramanas/features.meditation/domain/entities/mood_message.dart';
-
-import '../../datasources/meditation_remote_datasource.dart';
+import '../../domain/entities/daily_quote.dart';
+import '../../domain/entities/mood_message.dart';
 import '../../domain/repositories/meditation_repository.dart';
+import '../datasources/meditation_remote_datasource.dart';
 
 class MeditationRepositoryImpl implements MeditationRepository{
   final MeditationRemoteDataSource remoteDataSource;

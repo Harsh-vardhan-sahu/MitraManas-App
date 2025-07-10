@@ -1,6 +1,6 @@
-import 'package:mitramanas/features.meditation/domain/repositories/meditation_repository.dart';
 
 import '../entities/mood_message.dart';
+import '../repositories/meditation_repository.dart';
 
 class GetMoodMessage{
   final MeditationRepository repository;

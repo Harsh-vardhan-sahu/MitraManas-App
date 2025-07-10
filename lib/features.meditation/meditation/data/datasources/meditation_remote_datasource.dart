@@ -1,8 +1,7 @@
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
-import 'package:mitramanas/features.meditation/data/modals/daily_quote_model.dart';
-import '../data/modals/mood_message_model.dart';
+import '../modals/daily_quote_model.dart';
+import '../modals/mood_message_model.dart';
 
 abstract class MeditationRemoteDataSource{
   Future<DailyQuoteModel> getDailyQuote();

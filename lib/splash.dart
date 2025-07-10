@@ -1,36 +1,58 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:mitramanas/features.meditation/presentation/pages/meditation.dart';
 import 'package:mitramanas/presentation/home_page/home_page.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // Navigate after 3 seconds
-    Future.delayed(const Duration(seconds: 3), () {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => HomeScreen()),
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _fadeAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1500),
+    );
+
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+
+    _controller.forward();
+
+    Timer(const Duration(seconds: 3), () {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) =>  HomeScreen()),
       );
     });
+  }
 
-    final screenHeight = MediaQuery.of(context).size.height;
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFE6F4F9),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Image takes 60% of screen height responsively
-            SizedBox(
-              height: screenHeight * 0.6,
-              child: Image.asset(
-                'assets/splash.png',
-                fit: BoxFit.contain,
-              ),
-            ),
-          ],
+      body: FadeTransition(
+        opacity: _fadeAnimation,
+        child: SizedBox.expand(
+          child: Image.asset(
+            'assets/img_3.png',
+            fit: BoxFit.fill, // 💡 Ensures perfect screen fit (no crop or zoom)
+          ),
         ),
       ),
     );

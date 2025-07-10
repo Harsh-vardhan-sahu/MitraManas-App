@@ -1,4 +1,5 @@
-import 'package:mitramanas/features.meditation/domain/entities/mood_message.dart';
+
+import '../../domain/entities/mood_message.dart';
 
 class MoodMessageModel extends  MoodMessage{
   MoodMessageModel({required String text}) : super(text: text);
