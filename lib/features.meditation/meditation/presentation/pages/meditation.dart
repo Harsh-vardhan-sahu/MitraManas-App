@@ -2,10 +2,10 @@ import 'dart:ui';
 
 import 'package:animate_do/animate_do.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../../../core/theme.dart';
 import '../../../../features/meditation/blog/streak_bar.dart';
@@ -16,7 +16,6 @@ import '../bloc/mood_message/mood_message_bloc.dart';
 import '../bloc/mood_message/mood_message_event.dart';
 import '../bloc/mood_message/mood_message_state.dart';
 import '../widgets/Task_card.dart';
-import '../widgets/buttons.dart';
 
 class MeditationScreen extends StatefulWidget {
   const MeditationScreen({Key? key}) : super(key: key);
@@ -42,9 +41,11 @@ class _MeditationScreenState extends State<MeditationScreen> {
     final uid = FirebaseAuth.instance.currentUser?.uid;
     if (uid == null) return;
 
-    final doc = await FirebaseFirestore.instance.collection('users').doc(uid).get();
+    final userDocRef = FirebaseFirestore.instance.collection('users').doc(uid);
+    final doc = await userDocRef.get();
+
     if (!doc.exists) {
-      await FirebaseFirestore.instance.collection('users').doc(uid).set({
+      await userDocRef.set({
         'name': FirebaseAuth.instance.currentUser?.displayName ?? 'Unknown',
         'email': FirebaseAuth.instance.currentUser?.email ?? 'Not provided',
         'streak': 0,
@@ -55,45 +56,57 @@ class _MeditationScreenState extends State<MeditationScreen> {
     final data = doc.data()!;
     final lastActive = (data['lastActive'] as Timestamp?)?.toDate();
     final streak = data['streak'] as int? ?? 0;
-    final now = DateTime.now().toUtc();
-    final yesterday = now.subtract(const Duration(days: 1));
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final yesterday = today.subtract(const Duration(days: 1));
 
+    bool shouldUpdate = false;
     int newStreak = streak;
-    if (lastActive != null) {
-      if (lastActive.day == now.day && lastActive.month == now.month && lastActive.year == now.year) {
-        // Already active today, no message
-      } else if (lastActive.day == yesterday.day && lastActive.month == yesterday.month && lastActive.year == yesterday.year) {
-        // Active yesterday, increment streak
-        newStreak = streak + 1;
-        _showStreakMessage(newStreak);
-      } else {
-        // Break in activity or first time today, reset or start streak
-        newStreak = 1;
-        _showStreakMessage(newStreak);
-      }
-    } else {
-      // First activity or sign-up, start streak
+
+    if (lastActive == null) {
+      // First activity ever
       newStreak = 1;
-      _showStreakMessage(newStreak);
+      shouldUpdate = true;
+    } else {
+      final last = DateTime(lastActive.year, lastActive.month, lastActive.day);
+      if (last == today) {
+        // Already active today; no update or message
+      } else if (last == yesterday) {
+        // Continue streak
+        newStreak = streak + 1;
+        shouldUpdate = true;
+      } else {
+        // Streak broken
+        newStreak = 1;
+        shouldUpdate = true;
+      }
     }
 
-    await FirebaseFirestore.instance.collection('users').doc(uid).update({
-      'streak': newStreak,
-      'lastActive': FieldValue.serverTimestamp(),
-    });
+    if (shouldUpdate) {
+      await userDocRef.update({
+        'streak': newStreak,
+        'lastActive': FieldValue.serverTimestamp(),
+      });
 
-
-    setState(() {
-      currentStreak = streak;
-    });
-
+      _showStreakMessage(newStreak); // Show only once
+      setState(() {
+        currentStreak = newStreak;
+      });
+    } else {
+      setState(() {
+        currentStreak = streak;
+      });
+    }
   }
 
   Future<void> fetchUserName() async {
     try {
       final uid = FirebaseAuth.instance.currentUser?.uid;
       if (uid != null) {
-        final doc = await FirebaseFirestore.instance.collection('users').doc(uid).get();
+        final doc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(uid)
+            .get();
         final name = doc['name'];
         setState(() {
           userName = name;
@@ -115,14 +128,8 @@ class _MeditationScreenState extends State<MeditationScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         duration: const Duration(seconds: 4),
-        margin: const EdgeInsets.only(
-          top: 280,
-          left: 24,
-          right: 24,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24),
-        ),
+        margin: const EdgeInsets.only(top: 280, left: 24, right: 24),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         content: Container(
           decoration: BoxDecoration(
             gradient: const LinearGradient(
@@ -142,7 +149,11 @@ class _MeditationScreenState extends State<MeditationScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           child: Row(
             children: [
-              const Icon(Icons.local_fire_department, color: Colors.white, size: 28),
+              const Icon(
+                Icons.local_fire_department,
+                color: Colors.white,
+                size: 28,
+              ),
               const SizedBox(width: 12),
               Expanded(
                 child: FadeInDown(
@@ -153,7 +164,11 @@ class _MeditationScreenState extends State<MeditationScreen> {
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                       shadows: [
-                        const Shadow(color: Colors.black26, blurRadius: 2, offset: Offset(0.5, 0.5)),
+                        const Shadow(
+                          color: Colors.black26,
+                          blurRadius: 2,
+                          offset: Offset(0.5, 0.5),
+                        ),
                       ],
                     ),
                   ),
@@ -165,7 +180,6 @@ class _MeditationScreenState extends State<MeditationScreen> {
       ),
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -222,9 +236,9 @@ class _MeditationScreenState extends State<MeditationScreen> {
                 fontWeight: FontWeight.bold,
                 color: DefaultColors.purple,
               ),
-              descTextStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Colors.grey[800],
-              ),
+              descTextStyle: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: Colors.grey[800]),
               btnOk: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: DefaultColors.purple,
@@ -264,10 +278,7 @@ class _MeditationScreenState extends State<MeditationScreen> {
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [
-                Colors.white,
-                DefaultColors.lightteal.withOpacity(0.15),
-              ],
+              colors: [Colors.white, DefaultColors.lightteal.withOpacity(0.15)],
             ),
           ),
           child: SafeArea(
@@ -278,25 +289,33 @@ class _MeditationScreenState extends State<MeditationScreen> {
                 children: [
                   FadeInDown(
                     child: Text(
-                      isLoading ? 'Welcome...' : 'Welcome, ${userName ?? 'Guest'}!',
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                        fontSize: 24,
-                      ),
+                      isLoading
+                          ? 'Welcome...'
+                          : 'Welcome, ${userName ?? 'Guest'}!',
+                      style: Theme.of(context).textTheme.headlineSmall
+                          ?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                            fontSize: 24,
+                          ),
                     ),
                   ),
                   const SizedBox(height: 12),
-                  Text("Weekly Streak,",style:Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                    fontSize: 17,
-                  ),),
-                 // const SizedBox(height: 1),
+                  Text(
+                    "Weekly Streak,",
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                      fontSize: 17,
+                    ),
+                  ),
+                  // const SizedBox(height: 1),
                   if (!isLoading)
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 16),
-                      child: StreakProgressBar(currentStreak:currentStreak??1), // Replace 5 with your streak variable
+                      child: StreakProgressBar(
+                        currentStreak: currentStreak ?? 1,
+                      ), // Replace 5 with your streak variable
                     ),
 
                   FadeInLeft(
@@ -312,10 +331,10 @@ class _MeditationScreenState extends State<MeditationScreen> {
                   isFeelingLoading
                       ? const Center(child: CircularProgressIndicator())
                       : Wrap(
-                    spacing: 12,
-                    runSpacing: 12,
-                    children: _buildFeelingButtons(context),
-                  ),
+                          spacing: 12,
+                          runSpacing: 12,
+                          children: _buildFeelingButtons(context),
+                        ),
                   const SizedBox(height: 24),
                   FadeInRight(
                     child: Text(
@@ -396,36 +415,49 @@ class _MeditationScreenState extends State<MeditationScreen> {
         'label': 'Happy',
         'image': 'assets/icons50.png',
         'gradient': [DefaultColors.pink, DefaultColors.pink.withOpacity(0.7)],
-        'mood': 'Today I am happy'
+        'mood': 'Today I am happy',
       },
       {
         'label': 'Calm',
         'image': 'assets/yin-yang.png',
-        'gradient': [DefaultColors.purple, DefaultColors.purple.withOpacity(0.7)],
-        'mood': 'Today I am calm'
+        'gradient': [
+          DefaultColors.purple,
+          DefaultColors.purple.withOpacity(0.7),
+        ],
+        'mood': 'Today I am calm',
       },
       {
         'label': 'Relax',
         'image': 'assets/relax.png',
-        'gradient': [DefaultColors.orange, DefaultColors.orange.withOpacity(0.7)],
-        'mood': 'Today I am relax'
+        'gradient': [
+          DefaultColors.orange,
+          DefaultColors.orange.withOpacity(0.7),
+        ],
+        'mood': 'Today I am relax',
       },
       {
         'label': 'Focus',
         'image': 'assets/focus.png',
-        'gradient': [DefaultColors.lightteal, DefaultColors.lightteal.withOpacity(0.7)],
-        'mood': 'Today I need to be focus but feel like I am missing something'
+        'gradient': [
+          DefaultColors.lightteal,
+          DefaultColors.lightteal.withOpacity(0.7),
+        ],
+        'mood': 'Today I need to be focus but feel like I am missing something',
       },
     ];
 
-    return feelings.map((item) => AdvancedFeelingButton(
-      label: item['label'] as String,
-      image: item['image'] as String,
-      gradient: LinearGradient(colors: item['gradient'] as List<Color>),
-      onTap: () => context.read<MoodMessageBloc>().add(
-        FetchMoodMessage(item['mood'] as String),
-      ),
-    )).toList();
+    return feelings
+        .map(
+          (item) => AdvancedFeelingButton(
+            label: item['label'] as String,
+            image: item['image'] as String,
+            gradient: LinearGradient(colors: item['gradient'] as List<Color>),
+            onTap: () => context.read<MoodMessageBloc>().add(
+              FetchMoodMessage(item['mood'] as String),
+            ),
+          ),
+        )
+        .toList();
   }
 }
 
@@ -447,7 +479,8 @@ class AdvancedFeelingButton extends StatefulWidget {
   _AdvancedFeelingButtonState createState() => _AdvancedFeelingButtonState();
 }
 
-class _AdvancedFeelingButtonState extends State<AdvancedFeelingButton> with SingleTickerProviderStateMixin {
+class _AdvancedFeelingButtonState extends State<AdvancedFeelingButton>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnim;
 
@@ -462,10 +495,7 @@ class _AdvancedFeelingButtonState extends State<AdvancedFeelingButton> with Sing
       upperBound: 1.0,
     );
 
-    _scaleAnim = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInOut,
-    );
+    _scaleAnim = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
 
     _controller.value = 1.0; // Ensure initialized to full scale
   }
@@ -533,11 +563,7 @@ class _AdvancedFeelingButtonState extends State<AdvancedFeelingButton> with Sing
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset(
-                      widget.image,
-                      width: 36,
-                      height: 36,
-                    ),
+                    Image.asset(widget.image, width: 36, height: 36),
                     const SizedBox(height: 8),
                     Text(
                       widget.label,

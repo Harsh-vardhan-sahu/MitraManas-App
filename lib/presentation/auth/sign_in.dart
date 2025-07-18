@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../home_page/home_page.dart';
 import 'auth_service.dart';
+import 'google_signin_service.dart';
 import 'sign_up.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -309,65 +310,74 @@ class _SignInScreenState extends State<SignInScreen> {
 
                                 const SizedBox(height: 20),
 
-                                /// Google Sign-In Button
-                                // FadeInUp(
-                                //   delay: const Duration(milliseconds: 600),
-                                //   child: GestureDetector(
-                                //     onTap: () async {
-                                //       setState(() => _isLoading = true);
-                                //       final user = await GoogleSignInService.signInWithGoogle();
-                                //       setState(() => _isLoading = false);
-                                //
-                                //       if (user != null) {
-                                //         Navigator.pushReplacement(
-                                //           context,
-                                //           MaterialPageRoute(builder: (_) => HomeScreen()),
-                                //         );
-                                //       } else {
-                                //         AwesomeDialog(
-                                //           context: context,
-                                //           dialogType: DialogType.error,
-                                //           title: 'Google Sign-In Failed',
-                                //           desc: 'Please try again.',
-                                //           btnOkOnPress: () {},
-                                //         ).show();
-                                //       }
-                                //     },
-                                //
-                                //     child: Container(
-                                //       decoration: BoxDecoration(
-                                //         color: Colors.white,
-                                //         borderRadius: BorderRadius.circular(12),
-                                //         boxShadow: [
-                                //           BoxShadow(
-                                //             color: Colors.black12,
-                                //             blurRadius: 8,
-                                //             offset: Offset(0, 4),
-                                //           ),
-                                //         ],
-                                //       ),
-                                //       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                                //       child: Row(
-                                //         mainAxisAlignment: MainAxisAlignment.center,
-                                //         children: [
-                                //           Image.asset(
-                                //             'assets/google.png', // make sure this image exists
-                                //             height: 24,
-                                //           ),
-                                //           const SizedBox(width: 12),
-                                //           Text(
-                                //             'Sign in with Google',
-                                //             style: GoogleFonts.poppins(
-                                //               color: Colors.black87,
-                                //               fontWeight: FontWeight.w600,
-                                //               fontSize: 16,
-                                //             ),
-                                //           ),
-                                //         ],
-                                //       ),
-                                //     ),
-                                //   ),
-                                // ),
+                                FadeInUp(
+                                  delay: const Duration(milliseconds: 600),
+                                  child: GestureDetector(
+                                    onTap: () async {
+                                      setState(() => _isLoading = true);
+                                      final user =
+                                          await GoogleSignInService.signInWithGoogle();
+                                      setState(() => _isLoading = false);
+
+                                      if (user != null) {
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) => HomeScreen(),
+                                          ),
+                                        );
+                                      } else {
+                                        AwesomeDialog(
+                                          context: context,
+                                          dialogType: DialogType.error,
+                                          title: 'Google Sign-In Failed',
+                                          desc: 'Please try again.',
+                                          descTextStyle: TextStyle(
+                                            color: Colors.black,
+                                          ),
+                                          btnOkOnPress: () {},
+                                        ).show();
+                                      }
+                                    },
+
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(12),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black12,
+                                            blurRadius: 8,
+                                            offset: Offset(0, 4),
+                                          ),
+                                        ],
+                                      ),
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 12,
+                                        horizontal: 16,
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Image.asset(
+                                            'assets/google.png', // make sure this image exists
+                                            height: 24,
+                                          ),
+                                          const SizedBox(width: 12),
+                                          Text(
+                                            'Sign in with Google',
+                                            style: GoogleFonts.poppins(
+                                              color: Colors.black87,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
 
                                 /// Sign Up Link
                                 FadeInUp(

@@ -3,9 +3,11 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+
 import '../modals/chat_message.dart';
 import '../service/gemini_service.dart';
 import '../storage/local_storage.dart';
+
 class ChatBubbleClipper extends CustomClipper<Path> {
   final bool isUser;
 
@@ -25,27 +27,48 @@ class ChatBubbleClipper extends CustomClipper<Path> {
       path.quadraticBezierTo(size.width, 0, size.width, radius);
       path.lineTo(size.width, size.height - radius);
       path.quadraticBezierTo(
-          size.width, size.height, size.width - radius, size.height);
+        size.width,
+        size.height,
+        size.width - radius,
+        size.height,
+      );
 
       path.lineTo(size.width - tailSize, size.height);
       path.quadraticBezierTo(
-          size.width, size.height, size.width - tailSize, size.height - tailSize);
+        size.width,
+        size.height,
+        size.width - tailSize,
+        size.height - tailSize,
+      );
 
       path.lineTo(radius, size.height - tailSize);
-      path.quadraticBezierTo(0, size.height - tailSize, 0, size.height - radius - tailSize);
+      path.quadraticBezierTo(
+        0,
+        size.height - tailSize,
+        0,
+        size.height - radius - tailSize,
+      );
       path.lineTo(0, radius);
       path.close();
     } else {
-
       path.moveTo(tailSize, 0);
       path.quadraticBezierTo(tailSize + radius, 0, tailSize + radius, 0);
       path.lineTo(size.width - radius, 0);
       path.quadraticBezierTo(size.width, 0, size.width, radius);
       path.lineTo(size.width, size.height - radius);
-      path.quadraticBezierTo(size.width, size.height, size.width - radius, size.height);
+      path.quadraticBezierTo(
+        size.width,
+        size.height,
+        size.width - radius,
+        size.height,
+      );
       path.lineTo(tailSize + radius, size.height);
       path.quadraticBezierTo(
-          tailSize, size.height, tailSize + radius, size.height - tailSize);
+        tailSize,
+        size.height,
+        tailSize + radius,
+        size.height - tailSize,
+      );
 
       // Tail curve bottom-left
       path.lineTo(tailSize, size.height - tailSize);
@@ -62,8 +85,6 @@ class ChatBubbleClipper extends CustomClipper<Path> {
   @override
   bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }
-
-
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -168,84 +189,84 @@ class _ChatScreenState extends State<ChatScreen> {
               clipper: ChatBubbleClipper(isUser: isUser),
               child: isUser
                   ? Container(
-                padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  color: Colors.indigo[100],
-                  border: Border.all(
-                    color: Colors.indigo.withOpacity(0.3),
-                  ),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 4,
-                      offset: Offset(2, 2),
-                    ),
-                  ],
-                ),
-                child: Text(
-                  msg.message,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    color: Colors.black87,
-                  ),
-                ),
-              )
-                  : BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                child: Container(
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Colors.blue.withOpacity(0.25),
-                        Colors.white.withOpacity(0.15),
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    color: Colors.white.withOpacity(0.1),
-                    border: Border.all(
-                      color: Colors.white.withOpacity(0.2),
-                      width: 1.2,
-                    ),
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      // 💬 Bot message
-                      Expanded(
-                        child: Text(
-                          msg.message,
-                          style: const TextStyle(
-                            fontSize: 15,
-                            color: Colors.black87,
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(
+                        color: Colors.indigo[100],
+                        border: Border.all(
+                          color: Colors.indigo.withOpacity(0.3),
+                        ),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 4,
+                            offset: Offset(2, 2),
                           ),
+                        ],
+                      ),
+                      child: Text(
+                        msg.message,
+                        style: const TextStyle(
+                          fontSize: 15,
+                          color: Colors.black87,
                         ),
                       ),
-                      // 🔊 Speaker icon
-                      if (isLatestBotMessage)
-                        GestureDetector(
-                          onTap: _toggleTts,
-                          child: Container(
-                            margin: const EdgeInsets.only(left: 8),
-                            padding: const EdgeInsets.all(6),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white.withOpacity(0.5),
-                            ),
-                            child: Icon(
-                              isTtsMuted
-                                  ? Icons.volume_off
-                                  : Icons.volume_up,
-                              size: 20,
-                              color: Colors.black87,
-                            ),
+                    )
+                  : BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                      child: Container(
+                        padding: const EdgeInsets.all(14),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              Colors.blue.withOpacity(0.25),
+                              Colors.white.withOpacity(0.15),
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          color: Colors.white.withOpacity(0.1),
+                          border: Border.all(
+                            color: Colors.white.withOpacity(0.2),
+                            width: 1.2,
                           ),
                         ),
-                    ],
-                  ),
-                ),
-              ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            // 💬 Bot message
+                            Expanded(
+                              child: Text(
+                                msg.message,
+                                style: const TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                            ),
+                            // 🔊 Speaker icon
+                            if (isLatestBotMessage)
+                              GestureDetector(
+                                onTap: _toggleTts,
+                                child: Container(
+                                  margin: const EdgeInsets.only(left: 8),
+                                  padding: const EdgeInsets.all(6),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.white.withOpacity(0.5),
+                                  ),
+                                  child: Icon(
+                                    isTtsMuted
+                                        ? Icons.volume_off
+                                        : Icons.volume_up,
+                                    size: 20,
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                    ),
             ),
           ),
         ),
@@ -253,16 +274,10 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-
-
-
   Widget _buildLoadingAnimation() {
     return const Padding(
       padding: EdgeInsets.all(12),
-      child: SpinKitThreeBounce(
-        color: Colors.lightBlueAccent,
-        size: 24,
-      ),
+      child: SpinKitThreeBounce(color: Colors.lightBlueAccent, size: 24),
     );
   }
 
@@ -277,23 +292,17 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
-        backgroundColor: Colors.lightBlueAccent,
+        backgroundColor: Colors.transparent,
         title: Center(child: const Text('Mitra')),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.delete),
-            onPressed: _deleteAll,
-          )
+          IconButton(icon: const Icon(Icons.delete), onPressed: _deleteAll),
         ],
       ),
 
       body: Stack(
         children: [
           Positioned.fill(
-            child: Image.asset(
-              'assets/img_6.png',
-              fit: BoxFit.cover,
-            ),
+            child: Image.asset('assets/img_6.png', fit: BoxFit.cover),
           ),
           Column(
             children: [
@@ -303,15 +312,22 @@ class _ChatScreenState extends State<ChatScreen> {
                   padding: const EdgeInsets.only(top: 16),
                   itemCount: _messages.length + (_isLoading ? 1 : 0),
                   itemBuilder: (_, index) {
-                    if (_isLoading && index == 0) return _buildLoadingAnimation();
-                    final msg = _messages[_messages.length - 1 - (index - (_isLoading ? 1 : 0))];
+                    if (_isLoading && index == 0)
+                      return _buildLoadingAnimation();
+                    final msg =
+                        _messages[_messages.length -
+                            1 -
+                            (index - (_isLoading ? 1 : 0))];
                     return _buildChatBubble(msg);
                   },
                 ),
               ),
               const Divider(height: 1),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 8,
+                ),
                 color: Colors.white.withOpacity(0.9),
                 child: Row(
                   children: [
@@ -323,8 +339,10 @@ class _ChatScreenState extends State<ChatScreen> {
                           hintText: 'Ask something...',
                           filled: true,
                           fillColor: Colors.grey[200],
-                          contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 12,
+                          ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(24),
                             borderSide: BorderSide.none,

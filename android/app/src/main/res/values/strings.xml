@@ -1,0 +1,4 @@
+<resources>
+    <!-- ✅ Add your OAuth 2.0 Client ID from google-services.json -->
+    <string name="default_web_client_id">713070198848-lfo72l4d6t61obubru54mc0vpunbflos.apps.googleusercontent.com</string>
+</resources>
