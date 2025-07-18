@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "713070198848",
+    "project_id": "mitramanas-ba305",
+    "storage_bucket": "mitramanas-ba305.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:713070198848:android:83f6074a55e081af0a5fa5",
+        "android_client_info": {
+          "package_name": "com.example.mitramanas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "713070198848-bhqqbd7om1lh94c8inhc4rb9r9iqgtoh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mitramanas",
+            "certificate_hash": "ce2555bbc0b771915e0c76073fe9371dc74e43d6"
+          }
+        },
+        {
+          "client_id": "713070198848-4v742jrckv93qbko3teics32r62mmvod.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmGofeWqLeshmb69XiqaCDLonYhBXjqW4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "713070198848-4v742jrckv93qbko3teics32r62mmvod.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "713070198848-66938f4ft2lbqddhjvk5cbi4tj488pip.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.mitramanas"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
