@@ -3,19 +3,16 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class GeminiService {
-  // ✅ Fixed syntax for API keys
   static List<String> get _apiKeys {
-    final keysString =
-        "AIzaSyATn75KngsqILUvQUWL4ow08IZaIC16zLQ,AIzaSyBZuj_7zbccJDWjgVGgwaGTlTe1CpJrH0s,AIzaSyAmL7Uc7ar6PfWyjouf4fHT9xi9IYSGKAI,AIzaSyAHQTTWsAbF1D1PApJMczWmeQ6_TCCy034";
-    if (keysString.isEmpty) return [];
-    return keysString.split(',');
+    final keysString = dotenv.env['GEMINI_API_KEYS'] ?? '';
+    return keysString.isEmpty ? [] : keysString.split(',');
   }
 
-  // ✅ Safer user name fetching with null checks
   static Future<String> fetchUserName() async {
     try {
       final uid = FirebaseAuth.instance.currentUser?.uid;
@@ -70,8 +67,7 @@ User says: "$prompt"
 """;
 
     for (final key in _apiKeys) {
-      final url =
-          "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=$key";
+      final url = "${dotenv.env['GEMINI_BASE']}?key=$key";
 
       try {
         final response = await http.post(
@@ -98,13 +94,13 @@ User says: "$prompt"
           debugPrint(
             "Key failed (${key.substring(0, 10)}...): ${response.statusCode}",
           );
-          continue; // Try next key
+          continue;
         } else {
           return "❌ Error ${response.statusCode}: ${response.reasonPhrase}";
         }
       } catch (e) {
         debugPrint("Exception with key ${key.substring(0, 10)}: $e");
-        continue; // Try next key
+        continue;
       }
     }
 

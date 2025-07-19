@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:mitraa/presentation/auth/authwrapper.dart';
 import 'package:mitraa/presentation/bottomNavbar/bloc/navigation_bloc.dart';
@@ -22,7 +23,7 @@ void main() async {
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   debugPrint("✅ Firebase initialized successfully");
-
+  await dotenv.load();
   await Hive.initFlutter();
   await Hive.openBox('chatBox');
   await di.init();

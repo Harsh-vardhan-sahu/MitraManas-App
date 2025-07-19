@@ -7,17 +7,19 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <uses-permission android:name="android.permission.CALL_PHONE"/>
 
+    <!-- ✅ Make hardware features optional -->
+    <uses-feature android:name="android.hardware.camera" android:required="false"/>
+    <uses-feature android:name="android.hardware.microphone" android:required="false"/>
+    <uses-feature android:name="android.hardware.touchscreen" android:required="false"/>
+
     <application
         android:label="mitramanas"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
 
-        <!-- ✅ Add Google Sign-In OAuth2 metadata -->
-        <meta-data
-            android:name="com.google.android.gms.auth.api.signin.v2.default_web_client_id"
-            android:value="@string/default_web_client_id" />
+        <!-- ❌ REMOVE Google Sign-In metadata -->
+        <!-- Amazon devices don’t support Google Sign-In -->
 
-        <!-- Flutter Main Activity -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -36,13 +38,11 @@
             </intent-filter>
         </activity>
 
-        <!-- Flutter Generated Plugin Registrant -->
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
     </application>
 
-    <!-- Flutter Engine text processing support -->
     <queries>
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>
