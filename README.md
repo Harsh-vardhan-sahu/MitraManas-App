@@ -33,7 +33,7 @@
 
 ### 🧘‍♂️ Meditation Module
 - 🌤️ Daily motivational quotes (via Gemini)
-- 🎯 Mood-tagged suggestions like *"I'm feeling anxious"* or *"I need focus"*
+- 🎯 Mood-tagged suggestions like *"I'm feeling happy"* or *"I need focus"*
 - 🔥 Unique glassmorphic **StreakProgressBar**
 - 📆 Streaks stored & synced via Firestore
 
