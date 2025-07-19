@@ -107,13 +107,13 @@
 | Layer       | Tech                                                                 |
 |-------------|----------------------------------------------------------------------|
 | Frontend    | Flutter + BLoC + Clean Architecture                                  |
-| Backend     | Node.js + Express.js (hosted on Render)                             |
+| Backend     | Node.js + Express.js (hosted on Render)                              |
 | Database    | PostgreSQL (Aiven cloud services)                                    |
 | API AI      | Google Gemini 2.5 Flash                                              |
 | Auth        | Firebase Auth (Google + Email)                                       |
 | Storage     | Firestore (remote) + Hive (local/offline)                            |
 | Hosting     | Render.com + UptimeRobot (keep alive)                                |
-| Local DB    | Hive for streaks, preferences, and offline data                      |
+| Local DB    | FireStore Database                                                   |
 
 ---
 
