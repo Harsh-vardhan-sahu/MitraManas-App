@@ -24,7 +24,11 @@
 **MitraManas** is a next-gen mental wellness app built with Flutter and supercharged by Node.js, Firebase, PostgreSQL, and Google’s Gemini 2.5 Flash API. It serves as a compassionate digital companion designed to promote emotional balance, mindfulness, and personal growth.
 
 ---
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/c8565308-cc43-4f3c-9a8a-657154d6d070" width="300" />
+</p>
 
+---
 ## ✨ App Highlights
 
 ### 🧘‍♂️ Meditation Module
@@ -112,11 +116,7 @@
 | Local DB    | Hive for streaks, preferences, and offline data                      |
 
 ---
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/c8565308-cc43-4f3c-9a8a-657154d6d070" width="100%" />
-</p>
 
----
 
 ### 📸 Screenshots
 
