@@ -98,6 +98,41 @@
 - 🔥 Firebase used with `flutterfire` + `firebase_core`, `firebase_auth`, `cloud_firestore`
 
 ---
+## 🧠 Tech Stack
 
-## 📁 Project Structure (Clean Architecture)
+| Layer       | Tech                                                                 |
+|-------------|----------------------------------------------------------------------|
+| Frontend    | Flutter + BLoC + Clean Architecture                                  |
+| Backend     | Node.js + Express.js (hosted on Render)                             |
+| Database    | PostgreSQL (Aiven cloud services)                                    |
+| API AI      | Google Gemini 2.5 Flash                                              |
+| Auth        | Firebase Auth (Google + Email)                                       |
+| Storage     | Firestore (remote) + Hive (local/offline)                            |
+| Hosting     | Render.com + UptimeRobot (keep alive)                                |
+| Local DB    | Hive for streaks, preferences, and offline data                      |
+
+---
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/c8565308-cc43-4f3c-9a8a-657154d6d070" width="100%" />
+</p>
+
+---
+
+### 📸 Screenshots
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/73aa6801-d816-4fcd-bf21-36ce1cbc0beb" width="140"/>
+  <img src="https://github.com/user-attachments/assets/ce12a978-29b1-4f49-a5e4-96018e6b74d7" width="140"/>
+  <img src="https://github.com/user-attachments/assets/5363477c-ea2b-4a94-a314-627df1f5e730" width="140"/>
+  <img src="https://github.com/user-attachments/assets/e8463a6e-38cf-4ac6-b8da-afe46268d05c" width="140"/>
+  <img src="https://github.com/user-attachments/assets/867d29f3-2fc7-4d69-84c4-3d22e7f06552" width="140"/>
+  <img src="https://github.com/user-attachments/assets/b63224a3-cac2-4ecc-84ce-243235c4ec93" width="140"/>
+</p>
+
+---
+
+### 👤 Developed by
+
+**Harsh Vardhan Sahu**  
+`Full-stack Developer | Flutter + Node.js | AI Integrator`
 
